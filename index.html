@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Rapid Business Offer — AutoRepHero</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;min-height:100dvh}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #1a1a2e}
+.header-brand{display:flex;align-items:center;gap:8px}
+.header-brand img{width:24px;height:24px;border-radius:5px}
+.header-brand span{font-weight:800;font-size:14px;background:linear-gradient(90deg,#38bdf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-tabs{display:flex;gap:4px}
+.tab{padding:6px 14px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#999;font-size:11px;font-weight:600;cursor:pointer}
+.tab.active{background:#fff;color:#000;border-color:#fff}
+
+/* Create Form */
+.create-section{padding:20px;flex:1;overflow-y:auto}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:12px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:#888;font-weight:500;margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;padding:12px 14px;background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#fff;font-family:inherit;font-size:14px}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:#3b82f6}
+.field textarea{resize:vertical;min-height:70px}
+.field-row{display:flex;gap:10px}
+.field-row .field{flex:1}
+
+/* AI Suggest */
+.ai-suggest{padding:12px 16px;background:linear-gradient(135deg,rgba(52,211,153,0.08),rgba(56,189,248,0.08));border:1px solid rgba(52,211,153,0.2);border-radius:12px;margin-bottom:16px;cursor:pointer;transition:all 0.2s}
+.ai-suggest:hover{border-color:rgba(52,211,153,0.4)}
+.ai-suggest .ai-icon{font-size:18px;margin-bottom:4px}
+.ai-suggest .ai-text{font-size:12px;color:#34d399;font-weight:600}
+.ai-suggest .ai-sub{font-size:11px;color:#666;margin-top:2px}
+
+/* Offer Templates */
+.template-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.template-card{padding:14px 12px;background:#1a1a1a;border:2px solid #333;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.2s}
+.template-card:hover,.template-card.active{border-color:#3b82f6;background:rgba(59,130,246,0.05)}
+.template-card .t-icon{font-size:24px;margin-bottom:4px}
+.template-card .t-name{font-size:11px;font-weight:700;color:#ddd}
+.template-card .t-desc{font-size:9px;color:#666;margin-top:2px}
+
+/* Color Picker */
+.color-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.color-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border 0.2s}
+.color-swatch.active{border-color:#fff}
+
+/* Preview */
+.preview-section{padding:20px}
+.offer-card{border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.offer-header{padding:28px 24px 20px;text-align:center;position:relative}
+.offer-header .badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.offer-header h2{font-size:28px;font-weight:900;margin-bottom:4px}
+.offer-header .offer-desc{font-size:14px;opacity:0.85;line-height:1.5}
+.offer-body{padding:0 24px 24px}
+.offer-value{text-align:center;padding:16px;background:rgba(0,0,0,0.15);border-radius:14px;margin-bottom:16px}
+.offer-value .val{font-size:42px;font-weight:900;line-height:1}
+.offer-value .val-sub{font-size:13px;opacity:0.7;margin-top:4px}
+.offer-details{font-size:12px;opacity:0.7;margin-bottom:16px;text-align:center;line-height:1.6}
+.offer-form{display:flex;flex-direction:column;gap:8px}
+.offer-form input{width:100%;padding:12px 16px;border-radius:10px;border:none;font-family:inherit;font-size:14px;background:rgba(255,255,255,0.15);color:#fff}
+.offer-form input::placeholder{color:rgba(255,255,255,0.4)}
+.offer-form .claim-btn{width:100%;padding:14px;border:none;border-radius:12px;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;color:#fff;background:rgba(0,0,0,0.3);transition:transform 0.2s}
+.offer-form .claim-btn:active{transform:scale(0.97)}
+.offer-footer{padding:12px 24px 16px;text-align:center}
+.offer-footer .biz-name{font-size:13px;font-weight:700;opacity:0.8}
+.offer-footer .biz-info{font-size:10px;opacity:0.5;margin-top:2px}
+.offer-powered{text-align:center;padding:8px;font-size:11px;color:#888}
+.offer-powered a{color:#999;text-decoration:none;font-weight:500}
+
+/* Actions */
+.action-bar{padding:16px 20px 24px;display:flex;flex-direction:column;gap:8px}
+.action-btn{width:100%;padding:14px;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform 0.2s}
+.action-btn:active{transform:scale(0.97)}
+.action-btn.primary{background:#22c55e;color:#fff;border:none}
+.action-btn.secondary{background:#1a1a1a;color:#fff;border:1px solid #333}
+.action-btn.link{background:none;color:#3b82f6;border:none;font-size:12px}
+
+/* QR Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(10px)}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:24px;padding:32px;text-align:center;max-width:320px;width:90%}
+.modal h3{color:#000;font-size:18px;margin-bottom:4px}
+.modal p{color:#666;font-size:12px;margin-bottom:16px}
+.modal-close{margin-top:16px;padding:10px 32px;border:none;background:#000;color:#fff;border-radius:10px;font-family:inherit;font-weight:600;cursor:pointer}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:200;display:none;animation:fadeUp 0.3s ease}
+.toast.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <div class="header">
+    <div class="header-brand">
+      <img src="autorephero-logo.jpg" alt="AutoRepHero">
+      <span>RBO</span>
+    </div>
+    <div class="header-tabs">
+      <button class="tab active" onclick="showTab('create')">✏️ Create</button>
+      <button class="tab" onclick="showTab('preview')">👁️ Preview</button>
+      <button class="tab" onclick="showTab('share')">📤 Share</button>
+    </div>
+  </div>
+
+  <!-- CREATE TAB -->
+  <div class="create-section" id="tab-create">
+
+    <div class="ai-suggest" onclick="aiSuggest()">
+      <div class="ai-icon">🤖</div>
+      <div class="ai-text">AI Offer Assistant</div>
+      <div class="ai-sub">Not sure what to offer? Let AI help you pick the best deal.</div>
+    </div>
+
+    <div class="section-title">Quick Templates</div>
+    <div class="template-grid">
+      <div class="template-card" onclick="pickTemplate('discount')"><div class="t-icon">💰</div><div class="t-name">% Discount</div><div class="t-desc">10-20% off</div></div>
+      <div class="template-card" onclick="pickTemplate('dollar')"><div class="t-icon">💵</div><div class="t-name">$ Off</div><div class="t-desc">$25 off next service</div></div>
+      <div class="template-card" onclick="pickTemplate('free')"><div class="t-icon">🎁</div><div class="t-name">Free Add-on</div><div class="t-desc">Free inspection</div></div>
+      <div class="template-card" onclick="pickTemplate('bogo')"><div class="t-icon">🤝</div><div class="t-name">Refer a Friend</div><div class="t-desc">Both get $25 off</div></div>
+      <div class="template-card" onclick="pickTemplate('first')"><div class="t-icon">⭐</div><div class="t-name">First-Time</div><div class="t-desc">New customer special</div></div>
+      <div class="template-card" onclick="pickTemplate('seasonal')"><div class="t-icon">🌞</div><div class="t-name">Seasonal</div><div class="t-desc">Spring/summer deal</div></div>
+    </div>
+
+    <div class="section-title">Your Offer</div>
+    <div class="field"><label>Business Name</label><input type="text" id="o_biz" placeholder="Your Business Name" oninput="updatePreview()"></div>
+    <div class="field"><label>Offer Headline</label><input type="text" id="o_headline" placeholder="10% Off Your First Service!" oninput="updatePreview()"></div>
+    <div class="field"><label>Offer Value</label>
+      <div class="field-row">
+        <div class="field"><input type="text" id="o_value" placeholder="10%" oninput="updatePreview()"></div>
+        <div class="field"><input type="text" id="o_value_sub" placeholder="off any service" oninput="updatePreview()"></div>
+      </div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="o_desc" placeholder="What's included? Any conditions?" oninput="updatePreview()"></textarea></div>
+    <div class="field-row">
+      <div class="field"><label>Phone</label><input type="tel" id="o_phone" placeholder="(509) 555-1234" oninput="formatPhone(this);updatePreview()"></div>
+      <div class="field"><label>Website</label><input type="text" id="o_website" placeholder="yourbiz.com" oninput="updatePreview()"></div>
+    </div>
+    <div class="field"><label>Expiration</label><input type="text" id="o_expires" placeholder="Valid through April 30, 2026" oninput="updatePreview()"></div>
+
+    <div class="section-title">Theme Color</div>
+    <div class="color-row" id="colorRow">
+      <div class="color-swatch active" style="background:#22c55e" onclick="pickColor('#22c55e',this)"></div>
+      <div class="color-swatch" style="background:#3b82f6" onclick="pickColor('#3b82f6',this)"></div>
+      <div class="color-swatch" style="background:#ef4444" onclick="pickColor('#ef4444',this)"></div>
+      <div class="color-swatch" style="background:#f59e0b" onclick="pickColor('#f59e0b',this)"></div>
+      <div class="color-swatch" style="background:#8b5cf6" onclick="pickColor('#8b5cf6',this)"></div>
+      <div class="color-swatch" style="background:#ec4899" onclick="pickColor('#ec4899',this)"></div>
+      <div class="color-swatch" style="background:#14b8a6" onclick="pickColor('#14b8a6',this)"></div>
+      <div class="color-swatch" style="background:#e65100" onclick="pickColor('#e65100',this)"></div>
+    </div>
+
+    <button class="action-btn primary" onclick="showTab('preview')">👁️ Preview Your Offer</button>
+  </div>
+
+  <!-- PREVIEW TAB -->
+  <div class="preview-section" id="tab-preview" style="display:none">
+    <div id="offerPreview"></div>
+    <div style="margin-top:16px;display:flex;gap:8px">
+      <button class="action-btn secondary" onclick="showTab('create')" style="flex:1">✏️ Edit</button>
+      <button class="action-btn primary" onclick="showTab('share')" style="flex:1">📤 Share</button>
+    </div>
+  </div>
+
+  <!-- SHARE TAB -->
+  <div class="preview-section" id="tab-share" style="display:none">
+    <div class="section-title">Share Your Offer</div>
+    <div class="action-bar" style="padding:0">
+      <button class="action-btn primary" onclick="shareOffer()">📤 Share Link</button>
+      <button class="action-btn secondary" onclick="showQR()">📱 Show QR Code</button>
+      <button class="action-btn secondary" onclick="copyLink()">📋 Copy Link</button>
+      <button class="action-btn link" onclick="addToRBC()">🔗 Add to My Business Card (RBC)</button>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <div style="font-size:11px;color:#666">Your offer link:</div>
+      <div id="offerUrl" style="font-size:13px;color:#3b82f6;margin-top:4px;word-break:break-all"></div>
+    </div>
+  </div>
+</div>
+
+<!-- QR Modal -->
+<div class="modal-overlay" id="qrModal" onclick="closeQR()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3 id="qrTitle">Scan to Claim</h3>
+    <p>Customer scans this to see your offer</p>
+    <canvas id="qrCanvas"></canvas>
+    <br><button class="modal-close" onclick="closeQR()">Done</button>
+  </div>
+</div>
+
+<!-- AI Modal -->
+<div class="modal-overlay" id="aiModal" onclick="closeAI()">
+  <div class="modal" onclick="event.stopPropagation()" style="text-align:left">
+    <h3 style="text-align:center">🤖 AI Offer Assistant</h3>
+    <p style="text-align:center;margin-bottom:16px">What type of business are you?</p>
+    <div style="display:flex;flex-direction:column;gap:6px" id="aiOptions">
+      <button class="ai-opt" onclick="aiPick('plumber')">🔧 Plumber / HVAC</button>
+      <button class="ai-opt" onclick="aiPick('roofer')">🏠 Roofer / Contractor</button>
+      <button class="ai-opt" onclick="aiPick('auto')">🚗 Auto Repair / Dealer</button>
+      <button class="ai-opt" onclick="aiPick('restaurant')">🍕 Restaurant / Food</button>
+      <button class="ai-opt" onclick="aiPick('salon')">💇 Salon / Spa</button>
+      <button class="ai-opt" onclick="aiPick('retail')">🛍️ Retail / Shop</button>
+      <button class="ai-opt" onclick="aiPick('other')">📦 Other Service</button>
+    </div>
+  </div>
+</div>
+<style>
+.ai-opt{padding:12px 16px;background:#f5f5f5;border:1px solid #ddd;border-radius:10px;font-family:inherit;font-size:14px;cursor:pointer;text-align:left;transition:all 0.2s}
+.ai-opt:hover{background:#e8e8e8;border-color:#aaa}
+</style>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let offerColor = '#22c55e';
+
+const TEMPLATES = {
+  discount: { headline: '10% Off Your Next Service!', value: '10%', valueSub: 'off any service', desc: 'New and existing customers welcome. Cannot be combined with other offers.' },
+  dollar: { headline: '$25 Off Your Next Visit!', value: '$25', valueSub: 'off any service over $100', desc: 'Present this offer at time of service. One per customer.' },
+  free: { headline: 'Free Inspection!', value: 'FREE', valueSub: 'inspection or estimate', desc: 'No obligation. We\'ll assess your situation and give an honest recommendation.' },
+  bogo: { headline: 'Refer a Friend — You Both Save!', value: '$25', valueSub: 'off for you AND your friend', desc: 'Share this offer with a friend. When they book, you both get $25 off your next service.' },
+  first: { headline: 'New Customer Special!', value: '15%', valueSub: 'off your first service', desc: 'Welcome! As a first-time customer, enjoy 15% off. We want to earn your business.' },
+  seasonal: { headline: 'Spring Special!', value: '20%', valueSub: 'off spring services', desc: 'Get ready for the season! Book now and save on spring maintenance and service.' },
+};
+
+const AI_SUGGESTIONS = {
+  plumber: { headline: '$50 Off Any Plumbing Repair', value: '$50', valueSub: 'off repairs over $200', desc: 'Leaks, clogs, water heaters — we fix it all. Licensed & insured. Fast same-day service.' },
+  roofer: { headline: 'Free Roof Inspection + 10% Off Repairs', value: 'FREE', valueSub: 'inspection + 10% off', desc: 'We\'ll inspect your roof at no charge. If repairs are needed, save 10%. Licensed, bonded & insured.' },
+  auto: { headline: '$25 Off Your Next Oil Change', value: '$25', valueSub: 'off any oil change', desc: 'Full synthetic included. Plus free multi-point inspection with every service.' },
+  restaurant: { headline: 'Buy One Entree, Get One Free!', value: 'BOGO', valueSub: 'free entree with purchase', desc: 'Dine in only. Second entree of equal or lesser value. Show this offer to your server.' },
+  salon: { headline: '20% Off Your First Visit', value: '20%', valueSub: 'off any service', desc: 'Haircuts, color, styling — look your best for less. New clients only.' },
+  retail: { headline: 'Buy 2, Get 1 Free!', value: 'B2G1', valueSub: 'free item with purchase', desc: 'Mix and match any items. Free item is equal or lesser value.' },
+  other: { headline: '15% Off Your First Service', value: '15%', valueSub: 'off your first booking', desc: 'We want to earn your business. Book today and save!' },
+};
+
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+  document.querySelectorAll('.tab')[tab==='create'?0:tab==='preview'?1:2].classList.add('active');
+  document.getElementById('tab-create').style.display = tab==='create'?'block':'none';
+  document.getElementById('tab-preview').style.display = tab==='preview'?'block':'none';
+  document.getElementById('tab-share').style.display = tab==='share'?'block':'none';
+  if(tab==='preview') renderPreview();
+  if(tab==='share') updateShareUrl();
+}
+
+function pickTemplate(key) {
+  const t = TEMPLATES[key];
+  document.querySelectorAll('.template-card').forEach(c=>c.classList.remove('active'));
+  event.target.closest('.template-card').classList.add('active');
+  document.getElementById('o_headline').value = t.headline;
+  document.getElementById('o_value').value = t.value;
+  document.getElementById('o_value_sub').value = t.valueSub;
+  document.getElementById('o_desc').value = t.desc;
+  updatePreview();
+}
+
+function pickColor(c, el) {
+  offerColor = c;
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function formatPhone(input) {
+  let v = input.value.replace(/\D/g, '');
+  if (v.length > 10) v = v.slice(0, 10);
+  if (v.length >= 7) input.value = '(' + v.slice(0,3) + ') ' + v.slice(3,6) + '-' + v.slice(6);
+  else if (v.length >= 4) input.value = '(' + v.slice(0,3) + ') ' + v.slice(3);
+  else if (v.length > 0) input.value = '(' + v;
+}
+
+function darken(hex, pct) {
+  const n = parseInt(hex.slice(1),16);
+  const r = Math.max(0,((n>>16)&0xFF)+Math.round(2.55*pct));
+  const g = Math.max(0,(((n>>8)&0xFF))+Math.round(2.55*pct));
+  const b = Math.max(0,((n&0xFF))+Math.round(2.55*pct));
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+
+function getOfferData() {
+  return {
+    biz: document.getElementById('o_biz').value || 'Your Business',
+    headline: document.getElementById('o_headline').value || 'Special Offer!',
+    value: document.getElementById('o_value').value || '10%',
+    valueSub: document.getElementById('o_value_sub').value || 'off',
+    desc: document.getElementById('o_desc').value || '',
+    phone: document.getElementById('o_phone').value || '',
+    website: document.getElementById('o_website').value || '',
+    expires: document.getElementById('o_expires').value || '',
+    color: offerColor,
+  };
+}
+
+function renderPreview() {
+  const d = getOfferData();
+  const dark = darken(d.color, -30);
+  document.getElementById('offerPreview').innerHTML = `
+    <div class="offer-card">
+      <div class="offer-header" style="background:linear-gradient(135deg,${d.color},${dark})">
+        <div class="badge" style="background:rgba(255,255,255,0.2)">LIMITED OFFER</div>
+        <h2>${d.headline}</h2>
+        ${d.desc ? `<div class="offer-desc">${d.desc}</div>` : ''}
+      </div>
+      <div class="offer-body" style="background:${dark}">
+        <div class="offer-value">
+          <div class="val">${d.value}</div>
+          <div class="val-sub">${d.valueSub}</div>
+        </div>
+        ${d.expires ? `<div class="offer-details">⏰ ${d.expires}</div>` : ''}
+        <div class="offer-form">
+          <input type="text" placeholder="Your Name" disabled>
+          <input type="email" placeholder="Email Address" disabled>
+          <input type="tel" placeholder="Phone Number" disabled>
+          <button class="claim-btn" style="background:${d.color}">🎉 CLAIM THIS OFFER</button>
+        </div>
+      </div>
+      <div class="offer-footer" style="background:${dark}">
+        <div class="biz-name">${d.biz}</div>
+        <div class="biz-info">${[d.phone, d.website].filter(Boolean).join(' · ')}</div>
+      </div>
+    </div>
+    <div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a></div>
+  `;
+}
+
+function updatePreview() { /* live updates happen on tab switch */ }
+
+function getSlug() {
+  const biz = document.getElementById('o_biz').value || 'offer';
+  return biz.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+
+function getOfferUrl() {
+  return 'https://rbo.autorephero.com/' + getSlug();
+}
+
+function updateShareUrl() {
+  document.getElementById('offerUrl').textContent = getOfferUrl();
+}
+
+function shareOffer() {
+  const url = getOfferUrl();
+  const d = getOfferData();
+  if (navigator.share) {
+    navigator.share({ title: d.headline, text: d.biz + ' — ' + d.headline, url: url }).catch(()=>{});
+  } else {
+    copyLink();
+  }
+}
+
+function copyLink() {
+  const url = getOfferUrl();
+  navigator.clipboard.writeText(url).then(()=>showToast('Link copied!')).catch(()=>{});
+}
+
+function showQR() {
+  const url = getOfferUrl();
+  const d = getOfferData();
+  document.getElementById('qrTitle').textContent = d.biz + ' Offer';
+  document.getElementById('qrModal').classList.add('active');
+  const canvas = document.getElementById('qrCanvas');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() { canvas.width=220;canvas.height=220;canvas.getContext('2d').drawImage(img,0,0,220,220); };
+  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(url);
+}
+
+function closeQR() { document.getElementById('qrModal').classList.remove('active'); }
+
+function addToRBC() {
+  const url = getOfferUrl();
+  showToast('Copy this link and add it as a link on your Business Card (RBC)');
+  navigator.clipboard.writeText(url).catch(()=>{});
+}
+
+function aiSuggest() { document.getElementById('aiModal').classList.add('active'); }
+function closeAI() { document.getElementById('aiModal').classList.remove('active'); }
+
+function aiPick(type) {
+  const s = AI_SUGGESTIONS[type];
+  document.getElementById('o_headline').value = s.headline;
+  document.getElementById('o_value').value = s.value;
+  document.getElementById('o_value_sub').value = s.valueSub;
+  document.getElementById('o_desc').value = s.desc;
+  closeAI();
+  showToast('✨ AI suggestion applied! Customize it for your business.');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
