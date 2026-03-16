@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Rapid Business Offer — AutoRepHero</title>
+<meta property="og:title" content="Special Offer — Claim Your Deal!">
+<meta property="og:description" content="Exclusive offer from a local business near you. Tap to claim before it expires!">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rbo.autorephero.com">
+<meta property="og:image" content="https://rbo.autorephero.com/autorephero-logo.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Special Offer — Claim Your Deal!">
+<meta name="twitter:description" content="Exclusive offer from a local business near you. Tap to claim!">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -180,6 +188,7 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
       <button class="action-btn secondary" onclick="showQR()">📱 Show QR Code</button>
       <button class="action-btn secondary" onclick="copyLink()">📋 Copy Link</button>
       <button class="action-btn link" onclick="addToRBC()">🔗 Add to My Business Card (RBC)</button>
+      <button class="action-btn secondary" onclick="copyEmbed()">🖥️ Get Embed Code (for your website)</button>
       <button class="action-btn link" onclick="window.open('https://rbc.autorephero.com','_blank')">📇 Don't have a Business Card yet? Create one free →</button>
     </div>
     <div style="text-align:center;margin-top:16px">
@@ -376,6 +385,12 @@ function showQR() {
 }
 
 function closeQR() { document.getElementById('qrModal').classList.remove('active'); }
+
+function copyEmbed() {
+  const url = getOfferUrl();
+  const code = `<iframe src="${url}" width="100%" height="700" style="border:none;border-radius:16px;max-width:480px" title="Special Offer"></iframe>`;
+  navigator.clipboard.writeText(code).then(()=>showToast('Embed code copied! Paste it into your website HTML.')).catch(()=>{});
+}
 
 function addToRBC() {
   const url = getOfferUrl();
