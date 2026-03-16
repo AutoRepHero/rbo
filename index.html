@@ -180,6 +180,7 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
       <button class="action-btn secondary" onclick="showQR()">📱 Show QR Code</button>
       <button class="action-btn secondary" onclick="copyLink()">📋 Copy Link</button>
       <button class="action-btn link" onclick="addToRBC()">🔗 Add to My Business Card (RBC)</button>
+      <button class="action-btn link" onclick="window.open('https://rbc.autorephero.com','_blank')">📇 Don't have a Business Card yet? Create one free →</button>
     </div>
     <div style="text-align:center;margin-top:16px">
       <div style="font-size:11px;color:#666">Your offer link:</div>
@@ -328,7 +329,7 @@ function renderPreview() {
         <div class="biz-info">${[d.phone, d.website].filter(Boolean).join(' · ')}</div>
       </div>
     </div>
-    <div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a></div>
+    <div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a> · <a href="https://rbc.autorephero.com" target="_blank" style="color:#34d399;text-decoration:none">Get Your Free Business Card</a></div>
   `;
 }
 
