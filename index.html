@@ -501,9 +501,9 @@ function showToast(msg) {
     };
     const dark = darken(d.color, -30);
     
-    // Hide create UI, show offer directly
-    document.querySelector('.app').innerHTML = `
-      <div style="max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:16px">
+    // Show offer at top, keep create UI below
+    const offerHTML = `
+      <div style="max-width:480px;margin:0 auto;padding:16px 16px 0">
         <div class="offer-card">
           <div class="offer-header" style="background:linear-gradient(135deg,${d.color},${dark})">
             <div class="badge" style="background:rgba(255,255,255,0.2)">LIMITED OFFER</div>
@@ -529,8 +529,14 @@ function showToast(msg) {
           </div>
         </div>
         <div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a> · <a href="https://rbc.autorephero.com" target="_blank" style="color:#34d399;text-decoration:none">Get Your Free Business Card</a></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:20px 0 12px">
+          <div style="flex:1;height:1px;background:#333"></div>
+          <span style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Create Your Own Offer</span>
+          <div style="flex:1;height:1px;background:#333"></div>
+        </div>
       </div>
     `;
+    document.querySelector('.app').insertAdjacentHTML('afterbegin', offerHTML);
   }
 })();
 
