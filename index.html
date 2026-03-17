@@ -312,35 +312,33 @@ function getOfferData() {
 }
 
 function renderPreview() {
-  const d = getOfferData();
-  const dark = darken(d.color, -30);
-  document.getElementById('offerPreview').innerHTML = `
-    <div class="offer-card">
-      <div class="offer-header" style="background:linear-gradient(135deg,${d.color},${dark})">
-        <div class="badge" style="background:rgba(255,255,255,0.2)">LIMITED OFFER</div>
-        <h2>${d.headline}</h2>
-        ${d.desc ? `<div class="offer-desc">${d.desc}</div>` : ''}
-      </div>
-      <div class="offer-body" style="background:${dark}">
-        <div class="offer-value">
-          <div class="val">${d.value}</div>
-          <div class="val-sub">${d.valueSub}</div>
-        </div>
-        ${d.expires ? `<div class="offer-details">⏰ ${d.expires}</div>` : ''}
-        <div class="offer-form">
-          <input type="text" placeholder="Your Name" disabled>
-          <input type="email" placeholder="Email Address" disabled>
-          <input type="tel" placeholder="Phone Number" disabled>
-          <button class="claim-btn" style="background:${d.color}">🎉 CLAIM THIS OFFER</button>
-        </div>
-      </div>
-      <div class="offer-footer" style="background:${dark}">
-        <div class="biz-name">${d.biz}</div>
-        <div class="biz-info">${[d.phone, d.website].filter(Boolean).join(' · ')}</div>
-      </div>
-    </div>
-    <div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a> · <a href="https://rbc.autorephero.com" target="_blank" style="color:#34d399;text-decoration:none">Get Your Free Business Card</a></div>
-  `;
+  var d = getOfferData();
+  var dark = darken(d.color, -30);
+  var descHtml = d.desc ? '<div class="offer-desc">' + d.desc + '</div>' : '';
+  var expiresHtml = d.expires ? '<div class="offer-details">⏰ ' + d.expires + '</div>' : '';
+  var infoHtml = [d.phone, d.website].filter(Boolean).join(' · ');
+  document.getElementById('offerPreview').innerHTML = 
+    '<div class="offer-card">' +
+      '<div class="offer-header" style="background:linear-gradient(135deg,' + d.color + ',' + dark + ')">' +
+        '<div class="badge" style="background:rgba(255,255,255,0.2)">LIMITED OFFER</div>' +
+        '<h2>' + d.headline + '</h2>' + descHtml +
+      '</div>' +
+      '<div class="offer-body" style="background:' + dark + '">' +
+        '<div class="offer-value"><div class="val">' + d.value + '</div><div class="val-sub">' + d.valueSub + '</div></div>' +
+        expiresHtml +
+        '<div class="offer-form">' +
+          '<input type="text" placeholder="Your Name" disabled>' +
+          '<input type="email" placeholder="Email Address" disabled>' +
+          '<input type="tel" placeholder="Phone Number" disabled>' +
+          '<button class="claim-btn" style="background:' + d.color + '">🎉 CLAIM THIS OFFER</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="offer-footer" style="background:' + dark + '">' +
+        '<div class="biz-name">' + d.biz + '</div>' +
+        '<div class="biz-info">' + infoHtml + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a></div>';
 }
 
 function updatePreview() { /* live updates happen on tab switch */ }
@@ -398,62 +396,38 @@ function printOffer() {
   const dark = darken(d.color, -30);
   const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(url);
   
-  const win = window.open('', '_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>Print Offer — ${d.biz}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f5f5f5}
-  .print-card{width:5in;height:7in;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);background:#fff}
-  .print-header{padding:28px 24px 20px;text-align:center;color:#fff;background:linear-gradient(135deg,${d.color},${dark})}
-  .print-header .badge{display:inline-block;padding:4px 14px;border-radius:100px;font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,0.2);margin-bottom:10px}
-  .print-header h2{font-size:22px;font-weight:900;line-height:1.2;margin-bottom:6px}
-  .print-header .desc{font-size:12px;opacity:0.9;line-height:1.5}
-  .print-body{padding:20px 24px;text-align:center}
-  .print-value{padding:16px;background:#f8f8f8;border-radius:12px;margin-bottom:16px}
-  .print-value .val{font-size:48px;font-weight:900;color:${d.color}}
-  .print-value .val-sub{font-size:13px;color:#666;margin-top:2px}
-  .print-qr{margin:16px auto;display:flex;flex-direction:column;align-items:center;gap:8px}
-  .print-qr img{border-radius:8px}
-  .print-qr .scan{font-size:11px;font-weight:700;color:${d.color};text-transform:uppercase;letter-spacing:1px}
-  .print-details{font-size:11px;color:#888;margin:12px 0;line-height:1.6}
-  .print-footer{padding:12px 24px;border-top:1px solid #eee;text-align:center}
-  .print-footer .biz{font-size:16px;font-weight:800;color:#222}
-  .print-footer .info{font-size:11px;color:#888;margin-top:2px}
-  .print-footer .powered{font-size:8px;color:#ccc;margin-top:8px}
-  @media print{body{background:#fff}.print-card{box-shadow:none;border:1px solid #eee}}
-</style></head><body>
-<div class="print-card">
-  <div class="print-header">
-    <div class="badge">LIMITED OFFER</div>
-    <h2>${d.headline}</h2>
-    ${d.desc ? `<div class="desc">${d.desc}</div>` : ''}
-  </div>
-  <div class="print-body">
-    <div class="print-value">
-      <div class="val">${d.value}</div>
-      <div class="val-sub">${d.valueSub}</div>
-    </div>
-    <div class="print-qr">
-      <div class="scan">📱 Scan to Claim</div>
-      <img src="${qrUrl}" width="160" height="160" alt="QR Code">
-    </div>
-    ${d.expires ? `<div class="print-details">⏰ ${d.expires}</div>` : ''}
-  </div>
-  <div class="print-footer">
-    <div class="biz">${d.biz}</div>
-    <div class="info">${[d.phone, d.website].filter(Boolean).join(' · ')}</div>
-    <div class="powered">Powered by AutoRepHero · autorephero.com</div>
-  </div>
-</div>
-<script>setTimeout(()=>window.print(),500)</script>
-</body></html>`);
+  var win = window.open('', '_blank');
+  var descP = d.desc ? '<div class="desc">' + d.desc + '</div>' : '';
+  var expP = d.expires ? '<div class="print-details">⏰ ' + d.expires + '</div>' : '';
+  var infoP = [d.phone, d.website].filter(Boolean).join(' · ');
+  win.document.write('<!DOCTYPE html><html><head><title>Print Offer — ' + d.biz + '</title>' +
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">' +
+    '<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f5f5f5}' +
+    '.print-card{width:5in;height:7in;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);background:#fff}' +
+    '.print-header{padding:28px 24px 20px;text-align:center;color:#fff;background:linear-gradient(135deg,' + d.color + ',' + dark + ')}' +
+    '.print-header .badge{display:inline-block;padding:4px 14px;border-radius:100px;font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,0.2);margin-bottom:10px}' +
+    '.print-header h2{font-size:22px;font-weight:900;line-height:1.2;margin-bottom:6px}.print-header .desc{font-size:12px;opacity:0.9;line-height:1.5}' +
+    '.print-body{padding:20px 24px;text-align:center}.print-value{padding:16px;background:#f8f8f8;border-radius:12px;margin-bottom:16px}' +
+    '.print-value .val{font-size:48px;font-weight:900;color:' + d.color + '}.print-value .val-sub{font-size:13px;color:#666;margin-top:2px}' +
+    '.print-qr{margin:16px auto;display:flex;flex-direction:column;align-items:center;gap:8px}.print-qr img{border-radius:8px}' +
+    '.print-qr .scan{font-size:11px;font-weight:700;color:' + d.color + ';text-transform:uppercase;letter-spacing:1px}' +
+    '.print-details{font-size:11px;color:#888;margin:12px 0;line-height:1.6}' +
+    '.print-footer{padding:12px 24px;border-top:1px solid #eee;text-align:center}.print-footer .biz{font-size:16px;font-weight:800;color:#222}' +
+    '.print-footer .info{font-size:11px;color:#888;margin-top:2px}.print-footer .powered{font-size:8px;color:#ccc;margin-top:8px}' +
+    '@media print{body{background:#fff}.print-card{box-shadow:none;border:1px solid #eee}}</style></head><body>' +
+    '<div class="print-card"><div class="print-header"><div class="badge">LIMITED OFFER</div><h2>' + d.headline + '</h2>' + descP + '</div>' +
+    '<div class="print-body"><div class="print-value"><div class="val">' + d.value + '</div><div class="val-sub">' + d.valueSub + '</div></div>' +
+    '<div class="print-qr"><div class="scan">📱 Scan to Claim</div><img src="' + qrUrl + '" width="160" height="160" alt="QR Code"></div>' +
+    expP + '</div>' +
+    '<div class="print-footer"><div class="biz">' + d.biz + '</div><div class="info">' + infoP + '</div>' +
+    '<div class="powered">Powered by AutoRepHero · autorephero.com</div></div></div>' +
+    '<script>setTimeout(function(){window.print()},500)<\/script></body></html>');
   win.document.close();
 }
 
 function copyEmbed() {
-  const url = getOfferUrl();
-  const code = `<iframe src="${url}" width="100%" height="700" style="border:none;border-radius:16px;max-width:480px" title="Special Offer"></iframe>`;
+  var url = getOfferUrl();
+  var code = '<iframe src="' + url + '" width="100%" height="700" style="border:none;border-radius:16px;max-width:480px" title="Special Offer"></iframe>';
   navigator.clipboard.writeText(code).then(()=>showToast('Embed code copied! Paste it into your website HTML.')).catch(()=>{});
 }
 
