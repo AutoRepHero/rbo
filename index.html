@@ -351,7 +351,12 @@ function getSlug() {
 }
 
 function getOfferUrl() {
-  return 'https://rbo.autorephero.com/' + getSlug();
+  const d = getOfferData();
+  const params = new URLSearchParams({
+    b: d.biz, h: d.headline, v: d.value, s: d.valueSub,
+    d: d.desc, p: d.phone, w: d.website, e: d.expires, c: d.color
+  });
+  return 'https://rbo.autorephero.com/' + getSlug() + '?' + params.toString();
 }
 
 function updateShareUrl() {
@@ -476,6 +481,71 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ===== LOAD OFFER FROM URL =====
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('h')) {
+    // This is a shared offer link — render it directly
+    const d = {
+      biz: params.get('b') || 'Business',
+      headline: params.get('h') || 'Special Offer!',
+      value: params.get('v') || '',
+      valueSub: params.get('s') || '',
+      desc: params.get('d') || '',
+      phone: params.get('p') || '',
+      website: params.get('w') || '',
+      expires: params.get('e') || '',
+      color: params.get('c') || '#22c55e',
+    };
+    const dark = darken(d.color, -30);
+    
+    // Hide create UI, show offer directly
+    document.querySelector('.app').innerHTML = `
+      <div style="max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:16px">
+        <div class="offer-card">
+          <div class="offer-header" style="background:linear-gradient(135deg,${d.color},${dark})">
+            <div class="badge" style="background:rgba(255,255,255,0.2)">LIMITED OFFER</div>
+            <h2>${d.headline}</h2>
+            ${d.desc ? `<div class="offer-desc">${d.desc}</div>` : ''}
+          </div>
+          <div class="offer-body" style="background:${dark}">
+            <div class="offer-value">
+              <div class="val">${d.value}</div>
+              <div class="val-sub">${d.valueSub}</div>
+            </div>
+            ${d.expires ? `<div class="offer-details">⏰ ${d.expires}</div>` : ''}
+            <form onsubmit="claimOffer(event)" style="display:flex;flex-direction:column;gap:8px" class="offer-form">
+              <input type="text" name="name" placeholder="Your Name" required>
+              <input type="email" name="email" placeholder="Email Address" required>
+              <input type="tel" name="phone" placeholder="Phone Number">
+              <button type="submit" class="claim-btn" style="background:${d.color}">🎉 CLAIM THIS OFFER</button>
+            </form>
+          </div>
+          <div class="offer-footer" style="background:${dark}">
+            <div class="biz-name">${d.biz}</div>
+            <div class="biz-info">${[d.phone, d.website].filter(Boolean).join(' · ')}</div>
+          </div>
+        </div>
+        <div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a> · <a href="https://rbc.autorephero.com" target="_blank" style="color:#34d399;text-decoration:none">Get Your Free Business Card</a></div>
+      </div>
+    `;
+  }
+})();
+
+function claimOffer(e) {
+  e.preventDefault();
+  const form = e.target;
+  const name = form.querySelector('[name=name]').value;
+  const email = form.querySelector('[name=email]').value;
+  const phone = form.querySelector('[name=phone]').value;
+  
+  // Show success
+  form.innerHTML = '<div style="text-align:center;padding:20px;color:#fff"><div style="font-size:36px;margin-bottom:8px">🎉</div><div style="font-size:18px;font-weight:800;margin-bottom:4px">Offer Claimed!</div><div style="font-size:13px;opacity:0.7">Check your email for details. Thank you!</div></div>';
+  
+  // TODO: Send lead data to backend/email
+  console.log('Lead captured:', { name, email, phone });
 }
 </script>
 </body>
