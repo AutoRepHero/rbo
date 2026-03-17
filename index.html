@@ -502,41 +502,38 @@ function showToast(msg) {
     const dark = darken(d.color, -30);
     
     // Show offer at top, keep create UI below
-    const offerHTML = `
-      <div style="max-width:480px;margin:0 auto;padding:16px 16px 0">
-        <div class="offer-card">
-          <div class="offer-header" style="background:linear-gradient(135deg,${d.color},${dark})">
-            <div class="badge" style="background:rgba(255,255,255,0.2)">LIMITED OFFER</div>
-            <h2>${d.headline}</h2>
-            ${d.desc ? `<div class="offer-desc">${d.desc}</div>` : ''}
-          </div>
-          <div class="offer-body" style="background:${dark}">
-            <div class="offer-value">
-              <div class="val">${d.value}</div>
-              <div class="val-sub">${d.valueSub}</div>
-            </div>
-            ${d.expires ? `<div class="offer-details">⏰ ${d.expires}</div>` : ''}
-            <form onsubmit="claimOffer(event)" style="display:flex;flex-direction:column;gap:8px" class="offer-form">
-              <input type="text" name="name" placeholder="Your Name" required>
-              <input type="email" name="email" placeholder="Email Address" required>
-              <input type="tel" name="phone" placeholder="Phone Number">
-              <button type="submit" class="claim-btn" style="background:${d.color}">🎉 CLAIM THIS OFFER</button>
-            </form>
-          </div>
-          <div class="offer-footer" style="background:${dark}">
-            <div class="biz-name">${d.biz}</div>
-            <div class="biz-info">${[d.phone, d.website].filter(Boolean).join(' · ')}</div>
-          </div>
-        </div>
-        <div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a> · <a href="https://rbc.autorephero.com" target="_blank" style="color:#34d399;text-decoration:none">Get Your Free Business Card</a></div>
-        <div style="display:flex;align-items:center;gap:12px;padding:20px 0 12px">
-          <div style="flex:1;height:1px;background:#333"></div>
-          <span style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Create Your Own Offer</span>
-          <div style="flex:1;height:1px;background:#333"></div>
-        </div>
-      </div>
-    `;
-    document.querySelector('.app').insertAdjacentHTML('afterbegin', offerHTML);
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'max-width:480px;margin:0 auto;padding:16px 16px 0';
+    var descHtml = d.desc ? '<div class="offer-desc">' + d.desc + '</div>' : '';
+    var expiresHtml = d.expires ? '<div class="offer-details">⏰ ' + d.expires + '</div>' : '';
+    var infoHtml = [d.phone, d.website].filter(Boolean).join(' · ');
+    wrap.innerHTML = '<div class="offer-card">' +
+      '<div class="offer-header" style="background:linear-gradient(135deg,' + d.color + ',' + dark + ')">' +
+        '<div class="badge" style="background:rgba(255,255,255,0.2)">LIMITED OFFER</div>' +
+        '<h2>' + d.headline + '</h2>' + descHtml +
+      '</div>' +
+      '<div class="offer-body" style="background:' + dark + '">' +
+        '<div class="offer-value"><div class="val">' + d.value + '</div><div class="val-sub">' + d.valueSub + '</div></div>' +
+        expiresHtml +
+        '<form onsubmit="claimOffer(event)" style="display:flex;flex-direction:column;gap:8px" class="offer-form">' +
+          '<input type="text" name="name" placeholder="Your Name" required>' +
+          '<input type="email" name="email" placeholder="Email Address" required>' +
+          '<input type="tel" name="phone" placeholder="Phone Number">' +
+          '<button type="submit" class="claim-btn" style="background:' + d.color + '">🎉 CLAIM THIS OFFER</button>' +
+        '</form>' +
+      '</div>' +
+      '<div class="offer-footer" style="background:' + dark + '">' +
+        '<div class="biz-name">' + d.biz + '</div>' +
+        '<div class="biz-info">' + infoHtml + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="offer-powered">Powered by <a href="https://autorephero.com" target="_blank">AutoRepHero</a> · <a href="https://rbc.autorephero.com" target="_blank" style="color:#34d399;text-decoration:none">Get Your Free Business Card</a></div>' +
+    '<div style="display:flex;align-items:center;gap:12px;padding:20px 0 12px">' +
+      '<div style="flex:1;height:1px;background:#333"></div>' +
+      '<span style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Create Your Own Offer</span>' +
+      '<div style="flex:1;height:1px;background:#333"></div>' +
+    '</div>';
+    document.querySelector('.app').insertBefore(wrap, document.querySelector('.app').firstChild);
   }
 })();
 
