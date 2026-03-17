@@ -132,12 +132,12 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
 
     <div class="section-title">Quick Templates</div>
     <div class="template-grid">
-      <div class="template-card" onclick="pickTemplate('discount')"><div class="t-icon">💰</div><div class="t-name">% Discount</div><div class="t-desc">10-20% off</div></div>
-      <div class="template-card" onclick="pickTemplate('dollar')"><div class="t-icon">💵</div><div class="t-name">$ Off</div><div class="t-desc">$25 off next service</div></div>
-      <div class="template-card" onclick="pickTemplate('free')"><div class="t-icon">🎁</div><div class="t-name">Free Add-on</div><div class="t-desc">Free inspection</div></div>
-      <div class="template-card" onclick="pickTemplate('bogo')"><div class="t-icon">🤝</div><div class="t-name">Refer a Friend</div><div class="t-desc">Both get $25 off</div></div>
-      <div class="template-card" onclick="pickTemplate('first')"><div class="t-icon">⭐</div><div class="t-name">First-Time</div><div class="t-desc">New customer special</div></div>
-      <div class="template-card" onclick="pickTemplate('seasonal')"><div class="t-icon">🌞</div><div class="t-name">Seasonal</div><div class="t-desc">Spring/summer deal</div></div>
+      <div class="template-card" onclick="pickTemplate('discount',this)"><div class="t-icon">💰</div><div class="t-name">% Discount</div><div class="t-desc">10-20% off</div></div>
+      <div class="template-card" onclick="pickTemplate('dollar',this)"><div class="t-icon">💵</div><div class="t-name">$ Off</div><div class="t-desc">$25 off next service</div></div>
+      <div class="template-card" onclick="pickTemplate('free',this)"><div class="t-icon">🎁</div><div class="t-name">Free Add-on</div><div class="t-desc">Free inspection</div></div>
+      <div class="template-card" onclick="pickTemplate('bogo',this)"><div class="t-icon">🤝</div><div class="t-name">Refer a Friend</div><div class="t-desc">Both get $25 off</div></div>
+      <div class="template-card" onclick="pickTemplate('first',this)"><div class="t-icon">⭐</div><div class="t-name">First-Time</div><div class="t-desc">New customer special</div></div>
+      <div class="template-card" onclick="pickTemplate('seasonal',this)"><div class="t-icon">🌞</div><div class="t-name">Seasonal</div><div class="t-desc">Spring/summer deal</div></div>
     </div>
 
     <div class="section-title">Your Offer</div>
@@ -264,15 +264,15 @@ function showTab(tab) {
   if(tab==='share') updateShareUrl();
 }
 
-function pickTemplate(key) {
+function pickTemplate(key, el) {
   const t = TEMPLATES[key];
+  if (!t) return;
   document.querySelectorAll('.template-card').forEach(c=>c.classList.remove('active'));
-  event.target.closest('.template-card').classList.add('active');
+  if (el) el.classList.add('active');
   document.getElementById('o_headline').value = t.headline;
   document.getElementById('o_value').value = t.value;
   document.getElementById('o_value_sub').value = t.valueSub;
   document.getElementById('o_desc').value = t.desc;
-  updatePreview();
 }
 
 function pickColor(c, el) {
