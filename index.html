@@ -227,7 +227,8 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
     <div style="display:flex;flex-direction:column;gap:6px" id="aiOptions">
       <button class="ai-opt" onclick="aiPick('plumber')">🔧 Plumber / HVAC</button>
       <button class="ai-opt" onclick="aiPick('roofer')">🏠 Roofer / Contractor</button>
-      <button class="ai-opt" onclick="aiPick('auto')">🚗 Auto Repair / Dealer</button>
+      <button class="ai-opt" onclick="aiPick('auto')">🔧 Auto Repair</button>
+      <button class="ai-opt" onclick="aiPick('carlot')">🚗 Car Sales / Dealer</button>
       <button class="ai-opt" onclick="aiPick('restaurant')">🍕 Restaurant / Food</button>
       <button class="ai-opt" onclick="aiPick('salon')">💇 Salon / Spa</button>
       <button class="ai-opt" onclick="aiPick('retail')">🛍️ Retail / Shop</button>
@@ -258,6 +259,7 @@ const AI_SUGGESTIONS = {
   plumber: { headline: '$50 Off Any Plumbing Repair', value: '$50', valueSub: 'off repairs over $200', desc: 'Leaks, clogs, water heaters — we fix it all. Licensed & insured. Fast same-day service.' },
   roofer: { headline: 'Free Roof Inspection + 10% Off Repairs', value: 'FREE', valueSub: 'inspection + 10% off', desc: 'We\'ll inspect your roof at no charge. If repairs are needed, save 10%. Licensed, bonded & insured.' },
   auto: { headline: '$25 Off Your Next Oil Change', value: '$25', valueSub: 'off any oil change', desc: 'Full synthetic included. Plus free multi-point inspection with every service.' },
+  carlot: { headline: 'Free Vehicle History Report', value: 'FREE', valueSub: 'Carfax report on any vehicle', desc: 'No commitment. Know exactly what you are buying. Ask for your free report today.' },
   restaurant: { headline: 'Buy One Entree, Get One Free!', value: 'BOGO', valueSub: 'free entree with purchase', desc: 'Dine in only. Second entree of equal or lesser value. Show this offer to your server.' },
   salon: { headline: '20% Off Your First Visit', value: '20%', valueSub: 'off any service', desc: 'Haircuts, color, styling — look your best for less. New clients only.' },
   retail: { headline: 'Buy 2, Get 1 Free!', value: 'B2G1', valueSub: 'free item with purchase', desc: 'Mix and match any items. Free item is equal or lesser value.' },
