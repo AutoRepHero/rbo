@@ -115,12 +115,15 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
   <div style="position:fixed;top:0;left:0;right:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #222;padding:10px 16px;text-align:center">
     <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px;font-family:Inter,sans-serif">⚡ Rapid Business Offer ⚡</div>
     <div style="font-size:10px;color:#888;margin-top:1px">Create a shareable offer for your customers</div>
+    <div id="tryAnotherBar" style="display:none;margin-top:6px">
+      <button onclick="aiTryAnother()" style="background:linear-gradient(135deg,rgba(52,211,153,0.08),rgba(56,189,248,0.08));border:1px solid rgba(52,211,153,0.3);border-radius:10px;color:#34d399;font-family:inherit;font-size:13px;font-weight:700;padding:8px 20px;cursor:pointer;width:100%;max-width:400px">🤖 Don't love it? Try another AI suggestion →</button>
+    </div>
     <div style="display:flex;gap:6px;justify-content:center;margin-top:6px">
       <button class="tab" onclick="showTab('preview')" style="padding:6px 16px">👁️ Preview</button>
       <button class="tab" onclick="showTab('share')" style="padding:6px 16px">📤 Share</button>
     </div>
   </div>
-  <div style="height:100px"></div>
+  <div id="headerSpacer" style="height:110px"></div>
 
   <!-- CREATE TAB -->
   <div class="create-section" id="tab-create">
@@ -174,9 +177,7 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
     <div style="height:80px"></div>
   </div>
   <div style="position:fixed;bottom:0;left:0;right:0;z-index:60;padding:8px 16px 12px;background:rgba(10,10,10,0.95);border-top:1px solid #222;text-align:center;backdrop-filter:blur(10px)">
-    <div id="tryAnotherBar" style="display:none;margin-bottom:6px">
-      <button onclick="aiTryAnother()" style="background:none;border:1px solid #333;border-radius:8px;color:#34d399;font-family:inherit;font-size:12px;font-weight:600;padding:6px 16px;cursor:pointer">🤖 Don't love it? Try another AI suggestion →</button>
-    </div>
+
     <button onclick="showTab('preview')" style="display:block;max-width:480px;margin:0 auto;width:100%;padding:14px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-family:inherit;font-weight:700;cursor:pointer"><span style="display:block;font-size:13px;opacity:0.85">Preview Your</span><span style="display:block;font-size:18px;margin-top:2px">⚡ Rapid Business Offer ⚡</span></button>
   </div>
 
@@ -512,6 +513,7 @@ function aiPick(type) {
   document.getElementById('aiButtonText').textContent = '🔄 Try Another Suggestion';
   document.getElementById('aiButtonSub').textContent = 'Suggestion ' + num + ' of ' + suggestions.length + ' for ' + type;
   document.getElementById('tryAnotherBar').style.display = 'block';
+  document.getElementById('headerSpacer').style.height = '155px';
 }
 
 function aiTryAnother() {
