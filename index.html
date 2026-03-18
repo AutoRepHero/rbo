@@ -126,10 +126,10 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
   <div class="create-section" id="tab-create">
     <p style="text-align:center;font-size:12px;color:#666;margin-bottom:14px">Create a shareable offer for your customers</p>
 
-    <div class="ai-suggest" onclick="aiSuggest()">
+    <div class="ai-suggest" onclick="lastAiType ? aiTryAnother() : aiSuggest()">
       <div class="ai-icon">🤖</div>
-      <div class="ai-text">AI Offer Assistant</div>
-      <div class="ai-sub">Not sure what to offer? Tell me your business type and I'll suggest the perfect deal.</div>
+      <div class="ai-text" id="aiButtonText">AI Offer Assistant</div>
+      <div class="ai-sub" id="aiButtonSub">Not sure what to offer? Tell me your business type and I'll suggest the perfect deal.</div>
     </div>
 
     <div class="divider">or choose a template</div>
@@ -251,15 +251,56 @@ const TEMPLATES = {
   seasonal: { headline: 'Spring Special!', value: '20%', valueSub: 'off spring services', desc: 'Get ready for the season! Book now and save on spring maintenance and service.' },
 };
 
-const AI_SUGGESTIONS = {
-  plumber: { headline: '$50 Off Any Plumbing Repair', value: '$50', valueSub: 'off repairs over $200', desc: 'Leaks, clogs, water heaters — we fix it all. Licensed & insured. Fast same-day service.' },
-  roofer: { headline: 'Free Roof Inspection + 10% Off Repairs', value: 'FREE', valueSub: 'inspection + 10% off', desc: 'We\'ll inspect your roof at no charge. If repairs are needed, save 10%. Licensed, bonded & insured.' },
-  auto: { headline: '$25 Off Your Next Oil Change', value: '$25', valueSub: 'off any oil change', desc: 'Full synthetic included. Plus free multi-point inspection with every service.' },
-  carlot: { headline: 'Free Vehicle History Report', value: 'FREE', valueSub: 'Carfax report on any vehicle', desc: 'No commitment. Know exactly what you are buying. Ask for your free report today.' },
-  restaurant: { headline: 'Buy One Entree, Get One Free!', value: 'BOGO', valueSub: 'free entree with purchase', desc: 'Dine in only. Second entree of equal or lesser value. Show this offer to your server.' },
-  salon: { headline: '20% Off Your First Visit', value: '20%', valueSub: 'off any service', desc: 'Haircuts, color, styling — look your best for less. New clients only.' },
-  retail: { headline: 'Buy 2, Get 1 Free!', value: 'B2G1', valueSub: 'free item with purchase', desc: 'Mix and match any items. Free item is equal or lesser value.' },
-  other: { headline: '15% Off Your First Service', value: '15%', valueSub: 'off your first booking', desc: 'We want to earn your business. Book today and save!' },
+var aiIndex = {};
+var AI_SUGGESTIONS = {
+  plumber: [
+    { headline: '$50 Off Any Plumbing Repair', value: '$50', valueSub: 'off repairs over $200', desc: 'Leaks, clogs, water heaters — we fix it all. Licensed & insured. Fast same-day service.' },
+    { headline: 'Free Plumbing Inspection', value: 'FREE', valueSub: 'inspection & estimate', desc: 'No obligation. We assess the problem and give you an honest recommendation.' },
+    { headline: '15% Off Water Heater Service', value: '15%', valueSub: 'off water heater repair or install', desc: 'Tank or tankless. Same-day service available.' },
+    { headline: 'Refer a Friend — Both Save $25', value: '$25', valueSub: 'off for you AND your friend', desc: 'When your friend books, you both save. No limits on referrals.' },
+  ],
+  roofer: [
+    { headline: 'Free Roof Inspection + 10% Off', value: 'FREE', valueSub: 'inspection + 10% off repairs', desc: 'We inspect at no charge. If repairs needed, save 10%. Licensed, bonded & insured.' },
+    { headline: '$500 Off Full Roof Replacement', value: '$500', valueSub: 'off complete re-roof', desc: 'New roof? Save $500. Free estimate included. Financing available.' },
+    { headline: 'Free Storm Damage Assessment', value: 'FREE', valueSub: 'damage assessment', desc: 'We work with your insurance company. No out-of-pocket cost if covered.' },
+    { headline: '10% Off Gutter Installation', value: '10%', valueSub: 'off new gutters', desc: 'Protect your home from water damage. Seamless gutters installed.' },
+  ],
+  auto: [
+    { headline: '$25 Off Your Next Oil Change', value: '$25', valueSub: 'off any oil change', desc: 'Full synthetic included. Plus free multi-point inspection with every service.' },
+    { headline: 'Free Brake Inspection', value: 'FREE', valueSub: 'brake check', desc: 'Squeaking? Grinding? Get a free inspection. No appointment needed.' },
+    { headline: '10% Off Any Repair Over $200', value: '10%', valueSub: 'off repairs over $200', desc: 'Quality parts, certified technicians. Warranty on all work.' },
+    { headline: 'Free A/C Check', value: 'FREE', valueSub: 'A/C system check', desc: 'Stay cool this summer. Free diagnosis — no obligation.' },
+  ],
+  carlot: [
+    { headline: 'Free Vehicle History Report', value: 'FREE', valueSub: 'Carfax report on any vehicle', desc: 'No commitment. Know exactly what you are buying. Ask for your free report today.' },
+    { headline: 'Free Trade-In Appraisal', value: 'FREE', valueSub: 'trade-in value assessment', desc: 'Find out what your current vehicle is worth. No obligation to buy.' },
+    { headline: 'Refer a Buyer, Get $50', value: '$50', valueSub: 'referral bonus', desc: 'Know someone looking for a car? Send them our way — you both win.' },
+    { headline: '$0 Down Payment Special', value: '$0', valueSub: 'down on approved credit', desc: 'Drive today with nothing down. On approved credit. Large selection available.' },
+  ],
+  restaurant: [
+    { headline: 'Buy One Entree, Get One Free!', value: 'BOGO', valueSub: 'free entree with purchase', desc: 'Dine in only. Second entree of equal or lesser value.' },
+    { headline: 'Free Appetizer with Any Entree', value: 'FREE', valueSub: 'appetizer', desc: 'Try something new on us. Dine in only.' },
+    { headline: '20% Off Your First Online Order', value: '20%', valueSub: 'off first order', desc: 'Order online and save. Delivery or pickup.' },
+    { headline: 'Kids Eat Free Tuesday', value: 'FREE', valueSub: 'kids meal with adult entree', desc: 'One free kids meal per adult entree purchased. Dine in only.' },
+  ],
+  salon: [
+    { headline: '20% Off Your First Visit', value: '20%', valueSub: 'off any service', desc: 'Haircuts, color, styling — look your best for less. New clients only.' },
+    { headline: 'Free Deep Conditioning Treatment', value: 'FREE', valueSub: 'with any color service', desc: 'Healthy, shiny hair included with your color appointment.' },
+    { headline: 'Refer a Friend — Both Get 15% Off', value: '15%', valueSub: 'off for you AND your friend', desc: 'Share the love. When they book, you both save.' },
+    { headline: '$10 Off Any Service Over $50', value: '$10', valueSub: 'off services over $50', desc: 'Any service — haircut, color, blowout, or treatment.' },
+  ],
+  retail: [
+    { headline: 'Buy 2, Get 1 Free!', value: 'B2G1', valueSub: 'free item with purchase', desc: 'Mix and match any items. Free item is equal or lesser value.' },
+    { headline: '20% Off Your Entire Purchase', value: '20%', valueSub: 'off everything', desc: 'One day only. In-store and online. Cannot combine with other offers.' },
+    { headline: 'Free Gift with Purchase Over $50', value: 'FREE', valueSub: 'gift with $50+ purchase', desc: 'Spend $50 and choose a free gift at checkout.' },
+    { headline: '$10 Off Your First Purchase', value: '$10', valueSub: 'off first order', desc: 'Welcome! Save on your first visit. New customers only.' },
+  ],
+  other: [
+    { headline: '15% Off Your First Service', value: '15%', valueSub: 'off first booking', desc: 'We want to earn your business. Book today and save!' },
+    { headline: 'Free Consultation', value: 'FREE', valueSub: 'initial consultation', desc: 'No obligation. Let us understand your needs and show you how we can help.' },
+    { headline: 'Refer a Friend — Both Save $25', value: '$25', valueSub: 'off for both', desc: 'When your friend books, you both save.' },
+    { headline: '$50 Off Any Service Over $200', value: '$50', valueSub: 'off services over $200', desc: 'Quality work at a fair price. Book today.' },
+  ],
 };
 
 function showTab(tab) {
@@ -450,14 +491,28 @@ function addToRBC() {
 function aiSuggest() { document.getElementById('aiModal').classList.add('active'); }
 function closeAI() { document.getElementById('aiModal').classList.remove('active'); }
 
+var lastAiType = null;
+
 function aiPick(type) {
-  const s = AI_SUGGESTIONS[type];
+  lastAiType = type;
+  if (!aiIndex[type]) aiIndex[type] = 0;
+  var suggestions = AI_SUGGESTIONS[type];
+  var s = suggestions[aiIndex[type] % suggestions.length];
   document.getElementById('o_headline').value = s.headline;
   document.getElementById('o_value').value = s.value;
   document.getElementById('o_value_sub').value = s.valueSub;
   document.getElementById('o_desc').value = s.desc;
+  aiIndex[type]++;
   closeAI();
-  showToast('✨ AI suggestion applied! Customize it for your business.');
+  var num = ((aiIndex[type] - 1) % suggestions.length) + 1;
+  showToast('✨ Suggestion ' + num + ' of ' + suggestions.length + ' — tap 🤖 to try another!');
+  document.getElementById('aiButtonText').textContent = '🔄 Try Another Suggestion';
+  document.getElementById('aiButtonSub').textContent = 'Suggestion ' + num + ' of ' + suggestions.length + ' for ' + type;
+}
+
+function aiTryAnother() {
+  if (lastAiType) aiPick(lastAiType);
+  else aiSuggest();
 }
 
 function showToast(msg) {
