@@ -112,22 +112,15 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
 <body>
 
 <div class="app" id="app">
-  <div class="header">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:8px">
-        <img src="autorephero-logo.jpg" alt="AutoRepHero" style="width:24px;height:24px;border-radius:5px">
-        <span style="font-weight:800;font-size:13px;color:#fff">AutoRepHero</span>
-      </div>
-      <div style="display:flex;gap:6px">
-        <button class="tab" onclick="showTab('preview')">👁️ Preview</button>
-        <button class="tab" onclick="showTab('share')">📤 Share</button>
-      </div>
+  <div style="position:fixed;top:0;left:0;right:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #222;padding:10px 16px;text-align:center">
+    <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px;font-family:Inter,sans-serif">⚡ Rapid Business Offer ⚡</div>
+    <div style="font-size:10px;color:#888;margin-top:1px">Create a shareable offer for your customers</div>
+    <div style="display:flex;gap:6px;justify-content:center;margin-top:6px">
+      <button class="tab" onclick="showTab('preview')" style="padding:6px 16px">👁️ Preview</button>
+      <button class="tab" onclick="showTab('share')" style="padding:6px 16px">📤 Share</button>
     </div>
   </div>
-  <div style="text-align:center;padding:16px 16px 8px">
-    <div style="font-size:14px;color:#888;font-weight:600">Create Your</div>
-    <div style="font-size:22px;font-weight:900;color:#fff;margin-top:2px">⚡ Rapid Business Offer ⚡</div>
-  </div>
+  <div style="height:100px"></div>
 
   <!-- CREATE TAB -->
   <div class="create-section" id="tab-create">
@@ -178,7 +171,10 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
       <div class="color-swatch" style="background:#e65100" onclick="pickColor('#e65100',this)"></div>
     </div>
 
-    <button class="action-btn primary" onclick="showTab('preview')" style="position:sticky;bottom:16px;z-index:50;box-shadow:0 -4px 20px rgba(0,0,0,0.5);font-size:16px;padding:16px"><span style="display:block;font-size:13px;opacity:0.85">Preview Your</span><span style="display:block;font-size:18px;margin-top:2px">⚡ Rapid Business Offer ⚡</span></button>
+    <div style="height:80px"></div>
+  </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;z-index:60;padding:12px 16px;background:rgba(10,10,10,0.95);border-top:1px solid #222;text-align:center;backdrop-filter:blur(10px)">
+    <button onclick="showTab('preview')" style="display:block;max-width:480px;margin:0 auto;width:100%;padding:14px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-family:inherit;font-weight:700;cursor:pointer"><span style="display:block;font-size:13px;opacity:0.85">Preview Your</span><span style="display:block;font-size:18px;margin-top:2px">⚡ Rapid Business Offer ⚡</span></button>
   </div>
 
   <!-- PREVIEW TAB -->
