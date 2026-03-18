@@ -200,7 +200,7 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
       <button class="action-btn link" onclick="addToRBC()">🔗 Add to My Business Card (RBC)</button>
       <button class="action-btn secondary" onclick="printOffer()">🖨️ Print for Table Tent</button>
       <button class="action-btn secondary" onclick="copyEmbed()">🖥️ Get Embed Code (for your website)</button>
-      <button class="action-btn link" onclick="window.open('https://rbc.autorephero.com','_blank')">📇 Don't have a Business Card yet? Create one free →</button>
+      <button class="action-btn link" onclick="goToRBCwithOffer()">📇 Don't have a Business Card yet? Create one free →</button>
     </div>
     <div style="text-align:center;margin-top:16px">
       <div style="font-size:11px;color:#666">Your offer link:</div>
@@ -484,6 +484,14 @@ function copyEmbed() {
   var url = getOfferUrl();
   var code = '<iframe src="' + url + '" width="100%" height="700" style="border:none;border-radius:16px;max-width:480px" title="Special Offer"></iframe>';
   navigator.clipboard.writeText(code).then(()=>showToast('Embed code copied! Paste it into your website HTML.')).catch(()=>{});
+}
+
+function goToRBCwithOffer() {
+  var d = getOfferData();
+  var params = new URLSearchParams({
+    offer_h: d.headline, offer_v: d.value, offer_s: d.valueSub, offer_d: d.desc, biz: d.biz, phone: d.phone, website: d.website
+  });
+  window.open('https://rbc.autorephero.com?builder=1&' + params.toString(), '_blank');
 }
 
 function addToRBC() {
