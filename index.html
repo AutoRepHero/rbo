@@ -178,7 +178,7 @@ body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100
   </div>
   <div style="position:fixed;bottom:0;left:0;right:0;z-index:60;padding:8px 16px 12px;background:rgba(10,10,10,0.95);border-top:1px solid #222;text-align:center;backdrop-filter:blur(10px)">
 
-    <button onclick="showTab('preview')" style="display:block;max-width:480px;margin:0 auto;width:100%;padding:14px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-family:inherit;font-weight:700;cursor:pointer"><span style="display:block;font-size:13px;opacity:0.85">Create Your</span><span style="display:block;font-size:18px;margin-top:2px">⚡ Rapid Business Offer ⚡</span></button>
+    <button id="bottomBtn" onclick="handleBottomBtn()" style="display:block;max-width:480px;margin:0 auto;width:100%;padding:14px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-family:inherit;font-weight:700;cursor:pointer"><span style="display:block;font-size:13px;opacity:0.85">Create Your</span><span style="display:block;font-size:18px;margin-top:2px">⚡ Rapid Business Offer ⚡</span></button>
   </div>
 
   <!-- PREVIEW TAB -->
@@ -307,6 +307,16 @@ var AI_SUGGESTIONS = {
   ],
 };
 
+var currentView = 'create';
+
+function handleBottomBtn() {
+  if (currentView === 'create') {
+    showTab('preview');
+  } else {
+    showTab('share');
+  }
+}
+
 function showTab(tab) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
   var tabs = document.querySelectorAll('.tab');
@@ -317,6 +327,21 @@ function showTab(tab) {
   document.getElementById('tab-share').style.display = tab==='share'?'block':'none';
   if(tab==='preview') renderPreview();
   if(tab==='share') updateShareUrl();
+  currentView = tab;
+  var btn = document.getElementById('bottomBtn');
+  var tryBar = document.getElementById('tryAnotherBar');
+  if (tab === 'create') {
+    btn.innerHTML = '<span style="display:block;font-size:13px;opacity:0.85">Create Your</span><span style="display:block;font-size:18px;margin-top:2px">⚡ Rapid Business Offer ⚡</span>';
+    btn.style.background = '#22c55e';
+    if (tryBar && lastAiType) tryBar.style.display = 'block';
+  } else if (tab === 'preview') {
+    btn.innerHTML = '<span style="display:block;font-size:13px;opacity:0.85">Share Your</span><span style="display:block;font-size:18px;margin-top:2px">⚡ Rapid Business Offer ⚡</span>';
+    btn.style.background = '#3b82f6';
+    if (tryBar) tryBar.style.display = 'none';
+  } else {
+    btn.style.display = 'none';
+    if (tryBar) tryBar.style.display = 'none';
+  }
 }
 
 function pickTemplate(key, el) {
@@ -522,6 +547,9 @@ function aiPick(type) {
   document.getElementById('aiButtonSub').textContent = 'Suggestion ' + num + ' of ' + suggestions.length + ' for ' + type;
   document.getElementById('tryAnotherBar').style.display = 'block';
   document.getElementById('headerSpacer').style.height = '155px';
+  // Scroll down to the form fields
+  var headline = document.getElementById('o_headline');
+  if (headline) setTimeout(function() { headline.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200);
 }
 
 function aiTryAnother() {
