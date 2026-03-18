@@ -620,16 +620,87 @@ function showToast(msg) {
 
 function claimOffer(e) {
   e.preventDefault();
-  const form = e.target;
-  const name = form.querySelector('[name=name]').value;
-  const email = form.querySelector('[name=email]').value;
-  const phone = form.querySelector('[name=phone]').value;
+  var form = e.target;
+  var custName = form.querySelector('[name=name]').value;
+  var custEmail = form.querySelector('[name=email]').value;
+  var custPhone = form.querySelector('[name=phone]').value;
   
-  // Show success
-  form.innerHTML = '<div style="text-align:center;padding:20px;color:#fff"><div style="font-size:36px;margin-bottom:8px">🎉</div><div style="font-size:18px;font-weight:800;margin-bottom:4px">Offer Claimed!</div><div style="font-size:13px;opacity:0.7">Check your email for details. Thank you!</div></div>';
+  // Get offer data from URL
+  var p = new URLSearchParams(window.location.search);
+  var bizName = p.get('b') || 'Business';
+  var headline = p.get('h') || 'Special Offer';
+  var value = p.get('v') || '';
+  var valueSub = p.get('s') || '';
+  var color = p.get('c') || '#22c55e';
+  var bizPhone = p.get('p') || '';
   
-  // TODO: Send lead data to backend/email
-  console.log('Lead captured:', { name, email, phone });
+  // Generate unique claim code
+  var code = 'DEAL-' + Math.random().toString(36).substr(2,4).toUpperCase();
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  var timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  
+  // Replace entire page with redemption screen
+  document.querySelector('.app').innerHTML = 
+    '<div style="max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:20px">' +
+      '<div style="border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.4);border:2px solid ' + color + '44">' +
+        // Header
+        '<div style="background:linear-gradient(135deg,' + color + ',#111);padding:24px;text-align:center">' +
+          '<div style="font-size:48px;margin-bottom:8px">✅</div>' +
+          '<div style="font-size:22px;font-weight:900;color:#fff">Offer Claimed!</div>' +
+          '<div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:4px">Show this screen to redeem</div>' +
+        '</div>' +
+        // Coupon body
+        '<div style="background:#111;padding:24px">' +
+          // Dashed border coupon feel
+          '<div style="border:2px dashed ' + color + '55;border-radius:14px;padding:20px;text-align:center;margin-bottom:16px">' +
+            '<div style="font-size:14px;color:#888;font-weight:600">' + bizName + '</div>' +
+            '<div style="font-size:36px;font-weight:900;color:' + color + ';margin:8px 0">' + value + '</div>' +
+            '<div style="font-size:14px;color:#ccc">' + valueSub + '</div>' +
+            '<div style="font-size:18px;font-weight:800;color:#fff;margin-top:8px">' + headline + '</div>' +
+          '</div>' +
+          // Claim details
+          '<div style="background:#1a1a1a;border-radius:12px;padding:16px;margin-bottom:16px">' +
+            '<div style="display:flex;justify-content:space-between;margin-bottom:8px">' +
+              '<span style="font-size:11px;color:#666">CLAIM CODE</span>' +
+              '<span style="font-size:14px;font-weight:800;color:' + color + ';letter-spacing:2px">' + code + '</span>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;margin-bottom:8px">' +
+              '<span style="font-size:11px;color:#666">CLAIMED BY</span>' +
+              '<span style="font-size:12px;color:#ccc">' + custName + '</span>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;margin-bottom:8px">' +
+              '<span style="font-size:11px;color:#666">DATE</span>' +
+              '<span style="font-size:12px;color:#ccc">' + dateStr + ' at ' + timeStr + '</span>' +
+            '</div>' +
+          '</div>' +
+          // Action buttons
+          '<div style="display:flex;flex-direction:column;gap:8px">' +
+            (bizPhone ? '<a href="tel:' + bizPhone.replace(/\\D/g,'') + '" style="display:block;padding:14px;background:#1a1a1a;border:1px solid #333;border-radius:12px;color:#fff;text-decoration:none;text-align:center;font-weight:700;font-size:14px">📞 Call ' + bizName + '</a>' : '') +
+            '<button onclick="emailCoupon(\'' + code + '\',\'' + bizName + '\',\'' + headline + '\',\'' + value + ' ' + valueSub + '\',\'' + custEmail + '\')" style="padding:14px;background:#1a1a1a;border:1px solid #333;border-radius:12px;color:#fff;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer">📧 Email This Coupon to Myself</button>' +
+            '<button onclick="saveCouponScreenshot()" style="padding:14px;background:#1a1a1a;border:1px solid #333;border-radius:12px;color:#fff;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer">📱 Save to My Phone</button>' +
+          '</div>' +
+        '</div>' +
+        // Footer
+        '<div style="background:#0a0a0a;padding:12px;text-align:center">' +
+          '<div style="font-size:11px;color:#888">Powered by <a href="https://autorephero.com" style="color:#999;text-decoration:none;font-weight:600">AutoRepHero</a></div>' +
+          '<a href="https://rbc.autorephero.com" style="display:inline-block;margin-top:6px;padding:6px 16px;background:#22c55e22;border:1px solid #22c55e44;border-radius:8px;color:#34d399;text-decoration:none;font-size:11px;font-weight:600">Get Your Own Free Business Card →</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  
+  // TODO: Send lead data to backend
+  console.log('Lead captured:', { name: custName, email: custEmail, phone: custPhone, code: code, business: bizName, offer: headline });
+}
+
+function emailCoupon(code, biz, headline, value, email) {
+  var subject = encodeURIComponent('Your ' + biz + ' Coupon — ' + code);
+  var body = encodeURIComponent('Your offer from ' + biz + ':\\n\\n' + headline + '\\n' + value + '\\n\\nClaim Code: ' + code + '\\n\\nShow this at checkout to redeem!');
+  window.open('mailto:' + email + '?subject=' + subject + '&body=' + body);
+}
+
+function saveCouponScreenshot() {
+  alert('Take a screenshot of this page to save your coupon!\\n\\niPhone: Side button + Volume up\\nAndroid: Power + Volume down');
 }
 </script>
 </body>
